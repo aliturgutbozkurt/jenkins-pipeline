@@ -1,7 +1,6 @@
 pipeline {
     environment {
         registry = "aliturgutbozkurt/jenkins-docker-test"
-        DOCKER_PWD = credentials('docker-login-pwd')
     }
     options {
         skipStagesAfterUnstable()
@@ -24,9 +23,12 @@ pipeline {
             }
         }
         stage("Build & Push Docker image") {
+             withCredentials([usernamePassword(credentialsId: 'docker-login-pwd', passwordVariable: 'DOCKER_REGISTRY_PWD', usernameVariable: 'DOCKER_REGISTRY_USER')]) {
+            sh "./mvnw -ntp jib:build"
+            }
             steps {
                 sh 'docker image build -t $registry:$BUILD_NUMBER .'
-                sh 'docker login -u aliturgutbozkurt -p $DOCKER_PWD'
+                sh 'docker login -u DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PWD'
                 sh 'docker image push $registry:$BUILD_NUMBER'
                 sh "docker image rm $registry:$BUILD_NUMBER"
             }
