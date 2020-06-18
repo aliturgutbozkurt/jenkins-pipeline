@@ -28,9 +28,4 @@ docker container run --rm \
     --net test-net \
     node:12.10-alpine sh -c "$wait_for"
 
-echo "Smoke tests..."
-docker container run --name tester \
-    --rm \
-    --net test-net \
-    gnschenker/node-docker sh -c "curl api:3000"
 
