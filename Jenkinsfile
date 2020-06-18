@@ -8,9 +8,8 @@ pipeline {
     }
     agent {
         docker {
-            image 'maven:3-alpine'
-            label 'my-defined-label'
-            args  '-v /tmp:/tmp'
+            image 'circleci/node'
+            args  '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
     stages {
