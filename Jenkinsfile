@@ -26,7 +26,8 @@ pipeline {
             steps {
                 sh 'docker image build -t $registry:$BUILD_NUMBER .'
                 withCredentials([usernamePassword(credentialsId: 'docker-login-pwd', passwordVariable: 'DOCKER_REGISTRY_PWD', usernameVariable: 'DOCKER_REGISTRY_USER')]){
-                    sh 'docker login -u DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PWD'
+                    echo '$DOCKER_REGISTRY_USER'
+                    sh 'docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PWD'
                 }    
                 sh 'docker image push $registry:$BUILD_NUMBER'
                 sh "docker image rm $registry:$BUILD_NUMBER"
